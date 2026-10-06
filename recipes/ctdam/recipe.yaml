@@ -1,0 +1,68 @@
+schema_version: 1
+
+context:
+  version: "2.12.0"
+
+package:
+  name: ctdam
+  version: ${{ version }}
+
+source:
+  url: https://files.pythonhosted.org/packages/source/c/ctdam/ctdam-${{ version }}.tar.gz
+  sha256: 3fd515a19c05965d0cd1b12747f1a56008eecaacb3730f436fd9de7f380a28c2
+
+build:
+  number: 0
+  noarch: python
+  script: ${{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  python:
+    entry_points:
+      - ctdam = ctdam.entry.cli:app
+      - proc_edit = ctdam.entry.gui:main
+
+requirements:
+  host:
+    - python >=3.12
+    - hatchling
+    - pip
+  run:
+    - python >=3.12
+    - xmltodict >=0.13.0
+    - docstring_parser >=0.17.0
+    - tomlkit >=0.12.3
+    - tqdm >=4.67.3
+    - numpydoc >=1.10.0
+    - netcdf4 >=1.7.4
+    - xarray >=2026.7.0
+    - gsw-xarray >=0.5.0
+    - odf-sbe >=0.3.0
+    - munch >=4.0.0
+    - scipy >=1.18.1
+    - matplotlib-base >=3.11.1
+    - gsw >=3.6.23
+
+tests:
+  - python:
+      imports:
+        - ctdam
+      pip_check: true
+  - requirements:
+      run:
+        - python
+        - typer
+        - platformdirs
+        - typing_extensions
+    script:
+      - ctdam --help
+
+about:
+  summary: Library for conversion, processing and plotting of CTD data.
+  license: GPL-3.0-only
+  license_file: LICENSE
+  homepage: https://github.com/DAM-CTD-Software/ctdam
+  repository: https://github.com/DAM-CTD-Software/ctdam
+  documentation: https://dam-ctd-software.github.io/ctdam
+
+extra:
+  recipe-maintainers:
+    - aaron-1702
